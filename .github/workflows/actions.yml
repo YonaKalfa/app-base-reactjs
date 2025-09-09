@@ -1,18 +1,18 @@
-name : Build and test
+name: Build and test
 
-on :
-  push :
+on:
+  push:
 
-jobs :
-    Build-and-test :
-    runs-on : ubuntu
+jobs:
+    Build-and-test:
+    runs-on: ubuntu
 
-    steps :
-            - name: Checkout
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                node-version: 20 
-                cache: npm
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 
+          cache: npm
