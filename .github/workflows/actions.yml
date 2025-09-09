@@ -2,6 +2,7 @@ name: Build and test
 
 on:
   push:
+  pull_request:
 
 jobs:
    build-and-test:
@@ -15,3 +16,34 @@ jobs:
         with:
           node-version: 20
           cache: npm
+jobs:
+    build-and-test:
+      runs-on: ubuntu-latest
+      steps:
+
+        - name: Install dependencies
+          run: npm install
+
+        - name: Build
+          run: npm run build
+
+        - name: Start app
+          run: |
+            npx --yes serve -s build -l 3000 & echo $! > server.pid
+
+        - name: Wait for server to be ready
+          run: |
+            npx --yes wait-on http://localhost:3000
+
+        - name: Test with curl
+          run: |
+            curl -I http://localhost:3000 | grep "200"
+
+        - name: Show logs if failed
+          if: failure()
+          run: cat app.log
+
+        - name: Stop app
+          if: always()
+          run: |
+            kill $(cat app.pid) || true
